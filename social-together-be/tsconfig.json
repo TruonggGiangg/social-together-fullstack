@@ -18,10 +18,8 @@
       "@auth/*": ["auth/*"],
       "@core/*": ["core/*"],
       "@decorator/*": ["decorator/*"],
-      "@quizz/*": ["quizz/*"],
-      "@quizz-set/*": ["quizz-set/*"],
-      "@upload/*": ["upload/*"],
-      "@users/*": ["users/*"]
+      "@users/*": ["users/*"],
+      "@guard/*": ["guard/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

@@ -5,6 +5,7 @@ import { UpdateUserDto } from '@users/dto/update-user.dto';
 import type { iUser } from '@users/user.interface';
 import { ResponseMessage, User } from '@decorator/customize';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 
 
 @ApiTags('Users')
@@ -26,6 +27,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Lấy danh sách tất cả người dùng' })
   @ApiResponse({ status: 200, description: 'Danh sách người dùng.' })
+  @Throttle({ default: { limit: 3, ttl: 3000, blockDuration: 3000 } })
   @Get()
   @ResponseMessage('Lấy danh sách tất cả người dùng')
   findAll(

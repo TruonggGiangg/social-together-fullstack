@@ -37,4 +37,31 @@ export class UploadService {
     });
   }
 
+
+  // Upload video
+  async uploadVideo(file): Promise<UploadApiResponse> {
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: 'nestjs_uploads', resource_type: 'video' },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result as UploadApiResponse);
+        },
+      ).end(file.buffer)
+    });
+  }
+
+  // Delete video
+  async deleteVideo(publicId: string): Promise<{ result: string }> {
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.destroy(
+        publicId,
+        { resource_type: 'video' },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result as { result: string });
+        },
+      );
+    });
+  }
 }

@@ -50,4 +50,37 @@ export class UploadController {
       result,
     };
   }
+
+
+  @ApiOperation({ summary: 'Upload file video' })
+  @ApiResponse({ status: 200, description: 'Đăng video thành công.' })
+  @ApiBody({ type: 'multipart/form-data' })
+  @Public()
+  @Post('video')
+  @UseInterceptors(FileInterceptor('file')) // bắt buộc
+  async uploadVideo(@UploadedFile() file) {
+    if (!file) throw new Error('File not found');
+    const result = await this.uploadService.uploadVideo(file);
+    return {
+      url: result.secure_url,
+      public_id: result.public_id,
+    };
+  }
+
+  @ApiOperation({ summary: 'Delete video' })
+  @ApiResponse({ status: 202, description: 'Xóa video thành công.' })
+  @ApiBody({ type: 'multipart/form-data' })
+  @Public()
+  @Delete('video')
+  @DeleteImage() // Guard xóa video
+  @UseGuards(UploadAuthGuard)
+  async deleteVideo(@Query('publicId') publicId: string) {
+    const result = await this.uploadService.deleteVideo(publicId);
+
+    return {
+      message: 'Đã xóa video thành công',
+      result,
+    };
+  }
+
 }

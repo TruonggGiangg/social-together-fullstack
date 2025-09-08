@@ -12,6 +12,7 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { CombinedAuthGuard } from '@guard/combined-auth.guard';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -51,7 +52,8 @@ import { CombinedAuthGuard } from '@guard/combined-auth.guard';
       ],
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    UploadModule
   ],
   controllers: [AppController],
   providers: [

@@ -1,5 +1,5 @@
 import { UploadAuthGuard } from '@auth/guard/upload-guard.strategy';
-import { DeleteImage, Public } from '@decorator/customize';
+import { DeleteURLUpload, Public } from '@decorator/customize';
 import {
   Controller,
   Delete,
@@ -40,7 +40,7 @@ export class UploadController {
   @ApiBody({ type: 'multipart/form-data' })
   @Public()
   @Delete('image')
-  @DeleteImage() // Guard xóa ảnh
+  @DeleteURLUpload() // Guard xóa ảnh
   @UseGuards(UploadAuthGuard)
   async deleteImage(@Query('publicId') publicId: string) {
     const result = await this.uploadService.deleteImage(publicId);
@@ -72,7 +72,7 @@ export class UploadController {
   @ApiBody({ type: 'multipart/form-data' })
   @Public()
   @Delete('video')
-  @DeleteImage() // Guard xóa video
+  @DeleteURLUpload() // Guard xóa video
   @UseGuards(UploadAuthGuard)
   async deleteVideo(@Query('publicId') publicId: string) {
     const result = await this.uploadService.deleteVideo(publicId);

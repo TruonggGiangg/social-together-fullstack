@@ -18,5 +18,5 @@ export const ResponseMessage = (message: string) => {
 }
 
 
-export const IS_DELETE_IMAGE = 'isDeleteImage';
-export const DeleteImage = () => SetMetadata(IS_DELETE_IMAGE, true);
+export const IS_DELETE_URL = 'isDeleteURL';
+export const DeleteURLUpload = () => SetMetadata(IS_DELETE_URL, true);

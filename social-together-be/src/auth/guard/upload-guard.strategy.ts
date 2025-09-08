@@ -1,6 +1,6 @@
 import { BadRequestException, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IS_DELETE_IMAGE } from '@decorator/customize';
+import { IS_DELETE_URL } from '@decorator/customize';
 
 @Injectable()
 export class UploadAuthGuard {
@@ -11,13 +11,13 @@ export class UploadAuthGuard {
     // Nếu có, thì xác thực user có quyền xóa ảnh hay không
     // Nếu không, thì bỏ qua guard này
     canActivate(context: ExecutionContext) {
-        const isDeleteImage = this.reflector.getAllAndOverride<boolean>(IS_DELETE_IMAGE, [
+        const isDeleteURL = this.reflector.getAllAndOverride<boolean>(IS_DELETE_URL, [
             context.getHandler(),
             context.getClass(),
         ]);
 
 
-        if (!isDeleteImage) {
+        if (!isDeleteURL) {
             return true; // Không phải route xóa ảnh, bỏ qua guard này
         }
 

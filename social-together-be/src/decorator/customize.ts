@@ -16,3 +16,7 @@ export const RESPONSE_MESSAGE = 'response_message';
 export const ResponseMessage = (message: string) => {
     return SetMetadata(RESPONSE_MESSAGE, message);
 }
+
+
+export const IS_DELETE_IMAGE = 'isDeleteImage';
+export const DeleteImage = () => SetMetadata(IS_DELETE_IMAGE, true);

@@ -1,22 +1,23 @@
-import { Public } from '@decorator/customize';
+import { UploadAuthGuard } from '@auth/guard/upload-guard.strategy';
+import { DeleteImage, Public } from '@decorator/customize';
 import {
-  BadRequestException,
   Controller,
   Delete,
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UploadService } from 'upload/upload.service';
 
 
 @Controller('upload')
+@ApiTags('upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) { }
-
 
   @ApiOperation({ summary: 'Upload file image' })
   @ApiResponse({ status: 200, description: 'Đăng ảnh thành công.' })
@@ -39,11 +40,9 @@ export class UploadController {
   @ApiBody({ type: 'multipart/form-data' })
   @Public()
   @Delete('image')
+  @DeleteImage() // Guard xóa ảnh
+  @UseGuards(UploadAuthGuard)
   async deleteImage(@Query('publicId') publicId: string) {
-    if (!publicId) {
-      throw new BadRequestException('publicId is required');
-    }
-
     const result = await this.uploadService.deleteImage(publicId);
 
     return {

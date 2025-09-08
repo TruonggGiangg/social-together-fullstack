@@ -23,6 +23,10 @@ export class User {
     @Prop({ required: true })
     role: string;
 
+    // Media ????
+    @Prop()
+    media: Array<string>;
+
     @Prop()
     gender: string;
 

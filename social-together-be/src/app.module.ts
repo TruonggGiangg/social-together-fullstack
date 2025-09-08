@@ -13,10 +13,11 @@ import * as winston from 'winston';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { CombinedAuthGuard } from '@guard/combined-auth.guard';
 import { UploadModule } from './upload/upload.module';
+import { UploadAuthGuard } from '@auth/guard/upload-guard.strategy';
 
 @Module({
   imports: [
-     MongooseModule.forRootAsync({
+    MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('URL_MONGODB'),
@@ -31,7 +32,7 @@ import { UploadModule } from './upload/upload.module';
       isGlobal: true, // Đảm bảo có thể dùng ở mọi module
     }),
 
-     WinstonModule.forRoot({
+    WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
           format: winston.format.combine(
@@ -41,12 +42,12 @@ import { UploadModule } from './upload/upload.module';
         }),
         new winston.transports.File({ filename: 'app.log' }),
       ],
-     }),
+    }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
           limit: 3, // Số yêu cầu tối đa trong TTL
-          ttl: 1000, 
+          ttl: 1000,
           blockDuration: 2000,  // Thời gian bị chặn nếu vượt quá giới hạn
         },
       ],
@@ -65,4 +66,4 @@ import { UploadModule } from './upload/upload.module';
     ThrottlerGuard
   ],
 })
-export class AppModule {}
+export class AppModule { }

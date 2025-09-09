@@ -1,13 +1,13 @@
 import React from 'react';
 import { VStack } from '@/components/ui/vstack';
-import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlHelper, FormControlHelperText, FormControlLabel, FormControlLabelText } from '@/components/ui/form-control';
+import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlLabel, FormControlLabelText } from '@/components/ui/form-control';
 import { Input, InputField } from '@/components/ui/input';
 import { Button, ButtonText } from '@/components/ui/button';
-import { useRouter } from 'expo-router';
-import { Link, LinkText } from '@/components/ui/link';
+// import { Link, LinkText } from '@/components/ui/link';
 import { Text, View } from 'react-native';
 import { Divider } from '@/components/ui/divider';
 import { Image } from '@/components/ui/image';
+import { Link } from 'expo-router';
 
 export default function TabLayoutLogin() {
     // const router = useRouter();
@@ -114,8 +114,8 @@ export default function TabLayoutLogin() {
 
                 <View className='flex-row justify-center items-center'>
                     <Text className='text-base'>Chưa có tài khoản ? </Text>
-                    <Link href="/signup" className="self-center">
-                        <LinkText style={{ textDecorationLine: "none" }}> Đăng ký</LinkText>
+                    <Link href="/signup" className="self-center text-blue-500 text-base">
+                        Đăng ký
                     </Link>
                 </View>
             </VStack>

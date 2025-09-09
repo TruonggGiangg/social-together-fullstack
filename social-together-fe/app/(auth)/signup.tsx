@@ -4,9 +4,9 @@ import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorTe
 import { Input, InputField } from '@/components/ui/input';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Text, View } from 'react-native';
-import { Link, LinkText } from '@/components/ui/link';
 import { Image } from '@/components/ui/image';
 import { Divider } from '@/components/ui/divider';
+import { Link } from 'expo-router';
 
 
 export default function TabLayoutSignUp() {
@@ -135,11 +135,10 @@ export default function TabLayoutSignUp() {
                     />
                 </View>
 
-                <Link href="/login" className="self-center w-full">
-                    <LinkText style={{ textDecorationLine: "none" }}>
-                        <Button className='w-full' variant="outline">Đăng nhập</Button>
-                    </LinkText>
+                <Link href="/login" className="self-center text-base w-full">
+                    <Button className='w-full' variant="outline">Đăng nhập</Button>
                 </Link>
+
 
             </VStack>
         </>

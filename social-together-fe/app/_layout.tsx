@@ -8,40 +8,43 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import '@/global.css';
+import { AuthProvider, useAuth } from '@/hooks/useAuthContext';
+import React from 'react';
 
+function RootNavigator() {
+  const { signIn } = useAuth();
+  // signIn trả về token nếu đã đăng nhập thì isSigned true nếu chưa thì false
+  const isSignedIn = true;
+
+
+  return (
+    <Stack>
+      {isSignedIn ? (
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      ) : (
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      )}
+      <Stack.Screen name="+not-found" />
+    </Stack>
+  );
+}
 
 export default function RootLayout() {
-  const isSignedIn = false;
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
-
-
-    <GluestackUIProvider mode="light">
-      <ThemeProvider value={colorScheme === 'light' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          {isSignedIn ? (
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          ) : (
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          )}
-
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </GluestackUIProvider>
-
-
-
+    <AuthProvider>
+      <GluestackUIProvider mode="light">
+        <ThemeProvider value={colorScheme === 'light' ? DarkTheme : DefaultTheme}>
+          <RootNavigator />
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </GluestackUIProvider>
+    </AuthProvider>
   );
 }

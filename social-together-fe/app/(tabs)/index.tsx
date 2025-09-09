@@ -1,57 +1,92 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { FlatList, Platform, StyleSheet, Text } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Box } from '@/components/ui/box';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Avatar, AvatarBadge, AvatarFallbackText, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+
+// Dữ liệu giả lập post
+const posts = [
+  {
+    id: "1",
+    user: "Nguyễn Văn A",
+    avatar: "https://i.pravatar.cc/150?img=1",
+    content: "Hôm nay trời đẹp quá ☀️",
+    image: "https://picsum.photos/400/250?random=1",
+  },
+  {
+    id: "2",
+    user: "Trần Thị B",
+    avatar: "https://i.pravatar.cc/150?img=2",
+    content: "Cafe sáng cùng bạn bè ☕",
+    image: "https://picsum.photos/400/250?random=2",
+  },
+];
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
+  const renderPost = ({ item }: { item: any }) => (
+    <Card className="mb-4 rounded-2xl shadow p-3 bg-white">
+      {/* Header post */}
+      <Box className="flex-row items-center mb-2">
+        <Avatar size="md">
+          <AvatarFallbackText>{item.user}</AvatarFallbackText>
+          <AvatarImage
+            source={{
+              uri: item.avatar,
+            }}
+          />
+          <AvatarBadge />
+        </Avatar>
+        {/* <Text className="font-semibold">{item.user}</Text> */}
+      </Box>
+
+      {/* Content post */}
+      <Text className="mb-2">{item.content}</Text>
+      {item.image && (
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+          source={{ uri: item.image }}
+          style={{ width: "100%", height: 200, borderRadius: 12 }}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      )}
+    </Card>
+  );
+
+  return (
+    <Box className="flex-1 bg-gray-100">
+      {/* Header */}
+      <Box className="flex-row justify-between items-center px-4 py-3 bg-white shadow">
+        <Text className="text-xl font-bold text-blue-600">Facebook</Text>
+        <Button className="rounded-full w-10 h-10 bg-gray-200 items-center justify-center">
+          <Text>🔔</Text>
+        </Button>
+      </Box>
+
+      {/* Ô đăng bài */}
+      <Card className="flex-row items-center p-3 m-3 rounded-2xl bg-white shadow">
+        <AvatarImage
+          className="w-10 h-10 rounded-full mr-3"
+          source={{ uri: "https://i.pravatar.cc/150?img=5" }}
+        />
+        <Input
+          // placeholder="Bạn đang nghĩ gì?"
+          className="flex-1 rounded-full bg-gray-100 px-3 py-2"
+        />
+      </Card>
+
+      {/* Danh sách post */}
+      <FlatList
+        data={posts}
+        renderItem={renderPost}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingHorizontal: 12 }}
+      />
+    </Box>
   );
 }
 

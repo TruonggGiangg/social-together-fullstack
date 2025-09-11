@@ -5,7 +5,7 @@ import { iUser } from '@users/user.interface';
 import { UsersService } from '@users/users.service';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import ms from 'ms';
+import ms = require('ms');
 @Injectable()
 export class AuthService {
     constructor(
@@ -59,12 +59,20 @@ export class AuthService {
 
         console.log('refreshToken', refreshToken);
 
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production', // Set to true in production
-            maxAge: Number(ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')))
-
-        });
+        {
+            const expire = this.configService.get<string>('JWT_REFRESH_EXPIRE');
+            const cookieOptions: any = {
+                httpOnly: true,
+                // secure: process.env.NODE_ENV === 'production', // Set to true in production
+            };
+            if (expire) {
+                const msValue = (ms as any)(expire);
+                if (typeof msValue === 'number') {
+                    cookieOptions.maxAge = msValue;
+                }
+            }
+            res.cookie('refreshToken', refreshToken, cookieOptions);
+        }
 
         await this.usersService.updateUserToken(user._id, refreshToken);
 
@@ -137,10 +145,21 @@ export class AuthService {
 
                 // Cập nhật cookie với refresh token mới
                 res.cookie('refreshToken', newRefreshToken, {
-                    httpOnly: true,
-                    sameSite: 'lax',
-                    secure: false, // chỉ đặt true khi chạy trên HTTPS
-                    maxAge: Number(ms(this.configService.get<string>('JWT_REFRESH_EXPIRE'))) // Convert string to milliseconds
+                    ...(() => {
+                        const expire = this.configService.get<string>('JWT_REFRESH_EXPIRE');
+                        const opts: any = {
+                            httpOnly: true,
+                            sameSite: 'lax',
+                            secure: false, // chỉ đặt true khi chạy trên HTTPS
+                        };
+                        if (expire) {
+                            const msValue = (ms as any)(expire);
+                            if (typeof msValue === 'number') {
+                                opts.maxAge = msValue;
+                            }
+                        }
+                        return opts;
+                    })() // Convert string to milliseconds
                 });
 
                 const accessToken = this.jwtService.sign({
